@@ -8,18 +8,16 @@ class World:
         self.timestep = 0
 
     def simulate(self, steps):
+        """simulate a number of steps in the world"""
         for i in range(steps):
-            self._simulate_step()
+            self.simulate_step()
 
+    def display_state(self):
         for character in self.characters:
-            print("{} has the following relationships:".format(character.name))
             character.display_relationships()
 
-    def _simulate_step(self):
-        """simulate a number of steps in the world"""
-
+    def simulate_step(self):
         self.timestep += 1
-        print('Time', self.timestep)
         for character in self.characters:
             character.decay_relationship()
             if character.location is not None:
@@ -34,4 +32,3 @@ class World:
                 if len(characters_except_current) > 0:
                     other_character = character.choose_character_to_socialize(characters_except_current)
                     character.socialize(other_character)
-                    print("{} socialized with {}.".format(character.name, other_character.name))

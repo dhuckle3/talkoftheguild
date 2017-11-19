@@ -70,5 +70,15 @@ class Character:
         return self.name
 
     def display_relationships(self):
+        print("{} has the following relationships:".format(self.name))
         for name in self.relationship.keys():
-            print("{} {:.2f}".format(name, self.relationship[name]))
+            charge = int(self.relationship[name])
+            print("\t{} is {}({})".format(name, relationship_name(charge), charge))
+
+def relationship_name(charge):
+    if charge < -100:
+        return "an enemy"
+    elif charge < 100:
+        return "an acquaintance"
+    else:
+        return "a friend"
