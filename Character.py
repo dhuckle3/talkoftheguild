@@ -1,4 +1,5 @@
 import random
+import names
 
 from Personality import Personality
 
@@ -12,11 +13,12 @@ class Character:
         self.occupation = occupation
         self.personality = personality
         self.relationship = {}
+        self.location = None
 
     @classmethod
     def random(cls):
-        name = ''.join(random.choice('abcde') for _ in range(3))
-        gender = random.choice(['male', 'female', 'other'])
+        gender = random.choice(['male', 'female'])
+        name = names.get_full_name(gender)
         personality = Personality.with_random_traits()
         age = random.randint(1, 100)
         occupation = random.choice(['farmer', 'adventurer', 'noble', None])
@@ -47,9 +49,26 @@ class Character:
 
         return increment
 
+    def decay_relationship(self):
+        for name in self.relationship.keys():
+            self.relationship[name] = max([self.relationship[name] - 0.1, 0])
+
     def socialize(self, character):
         if not self.knows(character):
             self.relationship[character.name] = 0.0
             character.relationship[self.name] = 0.0
         character.relationship[self.name] += character.calculate_charge_increment(self)
         self.relationship[character.name] += self.calculate_charge_increment(character)
+
+    def choose_character_to_socialize(self, characters):
+        return random.choice(characters)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+    def display_relationships(self):
+        for name in self.relationship.keys():
+            print("{} {:.2f}".format(name, self.relationship[name]))
